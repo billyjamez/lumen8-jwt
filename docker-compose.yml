@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: always
+    ports:
+      - "9906:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: demo_lumen_jwt
+      MYSQL_PASSWORD: secret
+  app:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    image: 'lumen8-jwt'
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
